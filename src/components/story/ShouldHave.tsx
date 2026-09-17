@@ -12,10 +12,10 @@ const CARDS: { title: string; detail: string; emoji: string }[] = [
       "I let the moment decide for me instead of stopping for even a second to think about how it would land on you. That second was mine to take, and I didn't.",
   },
   {
-    emoji: "💛",
-    title: "I should have understood your feelings.",
+    emoji: "💚",
+    title: "I should have understood your words.",
     detail:
-      "Your feelings were never something to work around. I should have paid attention to what you were actually telling me — in words and otherwise — instead of what I wanted to hear.",
+      "Your words were never something to work around. I should have paid attention to what you were actually telling me — in words and otherwise — instead of what I wanted to hear.",
   },
   {
     emoji: "🤝",

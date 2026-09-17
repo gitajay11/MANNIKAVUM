@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Screen from "./Screen";
 
 const VERSE = [
@@ -10,6 +10,72 @@ const VERSE = [
 ];
 
 type Phase = "verse" | "zoom" | "end";
+
+const VERSE_MAX_PX = 26;
+const VERSE_MIN_PX = 9;
+
+/**
+ * Renders the verse as exactly two lines: each line is nowrap and the font
+ * size is shrunk until the longest line fits the container width.
+ */
+function FitVerse() {
+  const boxRef = useRef<HTMLDivElement>(null);
+  const lineRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const [size, setSize] = useState(VERSE_MAX_PX);
+
+  useLayoutEffect(() => {
+    const box = boxRef.current;
+    if (!box) return;
+
+    const fit = () => {
+      const available = box.clientWidth;
+      if (!available) return;
+      // Measure at the max size, then scale down proportionally.
+      let widest = 0;
+      for (const el of lineRefs.current) {
+        if (!el) continue;
+        el.style.fontSize = `${VERSE_MAX_PX}px`;
+        widest = Math.max(widest, el.scrollWidth);
+      }
+      const next = widest
+        ? Math.max(VERSE_MIN_PX, Math.min(VERSE_MAX_PX, (available / widest) * VERSE_MAX_PX * 0.97))
+        : VERSE_MAX_PX;
+      for (const el of lineRefs.current) if (el) el.style.fontSize = `${next}px`;
+      setSize(next);
+    };
+
+    fit();
+    // Re-fit once the Tamil web font has loaded (metrics change).
+    document.fonts?.ready.then(fit);
+    const ro = new ResizeObserver(fit);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <div ref={boxRef} className="w-full">
+      <p
+        className="font-tamil text-fg font-semibold"
+        style={{ fontSize: size, lineHeight: 1.9 }}
+      >
+        {VERSE.map((line, i) => (
+          <motion.span
+            key={i}
+            ref={(el) => {
+              lineRefs.current[i] = el;
+            }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 + i * 0.9, duration: 0.8 }}
+            className="block text-center whitespace-nowrap"
+          >
+            {line}
+          </motion.span>
+        ))}
+      </p>
+    </div>
+  );
+}
 
 export default function Closing() {
   const [phase, setPhase] = useState<Phase>("verse");
@@ -25,27 +91,15 @@ export default function Closing() {
     <>
       <AnimatePresence mode="wait">
         {phase === "verse" && (
-          <Screen key="verse" className="min-h-dvh justify-center text-center">
+          <Screen key="verse" wide flush className="min-h-dvh justify-center text-center">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1 }}
               className="w-full"
             >
-              <div className="glass rounded-3xl p-7 sm:p-10">
-                <p className="font-tamil text-fg text-xl leading-loose font-semibold sm:text-2xl">
-                  {VERSE.map((line, i) => (
-                    <motion.span
-                      key={i}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + i * 0.9, duration: 0.8 }}
-                      className="block"
-                    >
-                      {line}
-                    </motion.span>
-                  ))}
-                </p>
+              <div className="glass rounded-3xl px-2 py-7 sm:px-8 sm:py-10">
+                <FitVerse />
               </div>
 
               <motion.div

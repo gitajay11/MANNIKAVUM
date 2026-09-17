@@ -37,10 +37,13 @@ export default function Screen({
   children,
   className = "",
   wide = false,
+  flush = false,
 }: {
   children: ReactNode;
   className?: string;
   wide?: boolean;
+  /** Minimal side padding on phones — for content that must not wrap. */
+  flush?: boolean;
 }) {
   return (
     <motion.section
@@ -48,7 +51,7 @@ export default function Screen({
       initial="initial"
       animate="animate"
       exit="exit"
-      className={`mx-auto flex w-full ${wide ? "max-w-3xl" : "max-w-xl"} flex-col items-center px-5 py-10 sm:px-8 ${className}`}
+      className={`mx-auto flex w-full ${wide ? "max-w-3xl" : "max-w-xl"} flex-col items-center ${flush ? "px-2" : "px-5"} py-10 sm:px-8 ${className}`}
     >
       {children}
     </motion.section>

@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import { submitMessage, submitResponse } from "@/lib/client";
 import { SILENT_TYPES, type ResponseType } from "@/lib/responses";
 import Apology from "./Apology";
+import BackButton from "./BackButton";
 import Choice from "./Choice";
 import Closing from "./Closing";
 import FinalScreen from "./FinalScreen";
@@ -27,13 +28,27 @@ type Step =
   | "closing";
 
 export default function Story() {
-  const [step, setStep] = useState<Step>("landing");
+  // Current step plus the trail behind it, so the back arrow can retrace.
+  const [nav, setNav] = useState<{ step: Step; history: Step[] }>({
+    step: "landing",
+    history: [],
+  });
+  const { step, history } = nav;
   const [choice, setChoice] = useState<ResponseType | null>(null);
 
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
   const go = useCallback((next: Step) => {
     scrollTop();
-    setStep(next);
+    setNav((n) => ({ step: next, history: [...n.history, n.step] }));
+  }, []);
+
+  const back = useCallback(() => {
+    scrollTop();
+    setNav((n) =>
+      n.history.length === 0
+        ? n
+        : { step: n.history[n.history.length - 1], history: n.history.slice(0, -1) },
+    );
   }, []);
 
   // Recorded only here — after she explicitly taps a response button.
@@ -57,6 +72,9 @@ export default function Story() {
   return (
     <main className="relative min-h-dvh">
       <Particles />
+      <AnimatePresence>
+        {history.length > 0 && <BackButton key="back" onClick={back} />}
+      </AnimatePresence>
       <AnimatePresence mode="wait">
         {step === "landing" && (
           <Landing key="landing" onNext={() => go("investigation")} />
