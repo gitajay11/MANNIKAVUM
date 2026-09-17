@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Only what she voluntarily submits: her chosen response, an optional
+/// message, and a random per-visit session id. Nothing else.
+enum ResponseType {
+  ACCEPTED
+  NEED_TIME
+  DONT_KNOW
+  DECLINE
+  NO_RESPONSE_NEEDED
+}
+
+model Response {
+  id           String       @id @default(cuid())
+  sessionId    String       @unique @map("session_id")
+  responseType ResponseType @map("response_type")
+  message      String?      @db.VarChar(2000)
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("responses")
+}

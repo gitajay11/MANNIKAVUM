@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0b0a14;
+  --bg-2: #14122a;
+  --fg: #f3eefc;
+  --muted: #a89fc4;
+  --rose: #ff8fb1;
+  --lavender: #b8a4ff;
+  --peach: #ffc3a0;
+  --mint: #8ef0c0;
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glow: rgba(184, 164, 255, 0.35);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-rose: var(--rose);
+  --color-lavender: var(--lavender);
+  --color-peach: var(--peach);
+  --color-mint: var(--mint);
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-tamil: var(--font-tamil), "Noto Sans Tamil", sans-serif;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Soft aurora background — cheap on mobile (two blurred radial gradients). */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(60% 50% at 20% 10%, rgba(184, 164, 255, 0.22), transparent 60%),
+    radial-gradient(50% 45% at 85% 20%, rgba(255, 143, 177, 0.16), transparent 60%),
+    radial-gradient(60% 55% at 50% 100%, rgba(142, 240, 192, 0.1), transparent 60%),
+    linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 60%);
+  pointer-events: none;
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 20px 60px -30px rgba(0, 0, 0, 0.7);
+}
+
+.glow-text {
+  text-shadow: 0 0 24px var(--glow);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: transform 200ms, background-color 200ms;
+  user-select: none;
+  cursor: pointer;
+  will-change: transform;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn-primary {
+  color: #1a1030;
+  background: linear-gradient(135deg, var(--peach), var(--rose) 55%, var(--lavender));
+  box-shadow: 0 10px 30px -10px rgba(255, 143, 177, 0.6);
+}
+.btn-ghost {
+  color: var(--fg);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--lavender);
+  outline-offset: 3px;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, var(--fg) 0%, var(--lavender) 40%, var(--rose) 60%, var(--fg) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.stamp {
+  font-family: var(--font-display);
+  border: 3px solid var(--rose);
+  color: var(--rose);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  transform: rotate(-8deg);
+  opacity: 0.9;
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.5 1.2'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.5 1.2'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");
+}
+
+textarea,
+input {
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
