@@ -66,7 +66,7 @@ export default function Landing({ onNext }: { onNext: () => void }) {
             }
             transition={leaving ? { duration: 0.65, ease: "easeInOut" } : {}}
           >
-            KINDLY, This way Ma&rsquo;am🍂
+            KINDLY, This way Ma&rsquo;am🍂 →
           </motion.button>
         </motion.div>
 
