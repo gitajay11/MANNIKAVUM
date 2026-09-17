@@ -182,7 +182,7 @@ export default function Closing() {
                 That&rsquo;s all.
               </p>
               <p className="text-muted mt-2 text-sm">
-                You can close this tab now. Take care, Abi. 🌙
+                You can close this tab now. Take care, ABI🌙.
               </p>
             </motion.div>
           </Screen>

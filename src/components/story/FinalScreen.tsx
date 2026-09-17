@@ -10,7 +10,7 @@ function linesFor(type: ResponseType): { lines: string[]; emoji: string } {
       return {
         emoji: "🤍",
         lines: [
-          "That's okay. 🤍",
+          "That's okay. 🏳️",
           "You didn't owe me a response in the first place.",
           "I just wanted to apologize properly.",
           "I'm genuinely sorry.",

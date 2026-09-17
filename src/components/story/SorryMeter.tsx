@@ -145,7 +145,7 @@ export default function SorryMeter({ onNext }: { onNext: () => void }) {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Continue →
+                But I&rsquo;m 3000 TIMES Sorry! Continue →
               </motion.button>
             </motion.div>
           )}
