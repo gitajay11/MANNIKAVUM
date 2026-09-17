@@ -23,7 +23,7 @@ const notoTamil = Noto_Sans_Tamil({
 });
 
 export const metadata: Metadata = {
-  title: "Okay... I messed up.",
+  title: "SORRY ABI",
   description: "A proper apology. No pressure, no strings.",
   robots: { index: false, follow: false },
 };
