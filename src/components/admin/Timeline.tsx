@@ -11,9 +11,9 @@ const dateFmt = new Intl.DateTimeFormat("en-GB", {
 
 const COLOR: Record<ResponseType, string> = {
   ACCEPTED: "var(--mint)",
-  NEED_TIME: "var(--peach)",
-  DONT_KNOW: "var(--lavender)",
-  DECLINE: "var(--rose)",
+  NEED_TIME: "var(--lime)",
+  DONT_KNOW: "var(--sage)",
+  DECLINE: "var(--emerald)",
   NO_RESPONSE_NEEDED: "var(--fg)",
 };
 

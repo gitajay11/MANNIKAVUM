@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0b0a14;
-  --bg-2: #14122a;
-  --fg: #f3eefc;
-  --muted: #a89fc4;
-  --rose: #ff8fb1;
-  --lavender: #b8a4ff;
-  --peach: #ffc3a0;
+  --bg: #070d0b;
+  --bg-2: #0d1b15;
+  --fg: #eefbf3;
+  --muted: #9dbfae;
+  --emerald: #34d399;
+  --sage: #b6e3c6;
+  --lime: #d9f99d;
   --mint: #8ef0c0;
-  --glass: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glow: rgba(184, 164, 255, 0.35);
+  --glass: rgba(142, 240, 192, 0.05);
+  --glass-border: rgba(142, 240, 192, 0.12);
+  --glow: rgba(142, 240, 192, 0.35);
 }
 
 @theme inline {
@@ -19,9 +19,9 @@
   --color-bg-2: var(--bg-2);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
-  --color-rose: var(--rose);
-  --color-lavender: var(--lavender);
-  --color-peach: var(--peach);
+  --color-emerald: var(--emerald);
+  --color-sage: var(--sage);
+  --color-lime: var(--lime);
   --color-mint: var(--mint);
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-sans: var(--font-manrope), system-ui, sans-serif;
@@ -48,9 +48,9 @@ body {
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(60% 50% at 20% 10%, rgba(184, 164, 255, 0.22), transparent 60%),
-    radial-gradient(50% 45% at 85% 20%, rgba(255, 143, 177, 0.16), transparent 60%),
-    radial-gradient(60% 55% at 50% 100%, rgba(142, 240, 192, 0.1), transparent 60%),
+    radial-gradient(60% 50% at 20% 10%, rgba(52, 211, 153, 0.2), transparent 60%),
+    radial-gradient(50% 45% at 85% 20%, rgba(142, 240, 192, 0.14), transparent 60%),
+    radial-gradient(60% 55% at 50% 100%, rgba(217, 249, 157, 0.09), transparent 60%),
     linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 60%);
   pointer-events: none;
 }
@@ -86,9 +86,9 @@ body {
   transform: scale(0.97);
 }
 .btn-primary {
-  color: #1a1030;
-  background: linear-gradient(135deg, var(--peach), var(--rose) 55%, var(--lavender));
-  box-shadow: 0 10px 30px -10px rgba(255, 143, 177, 0.6);
+  color: #06201a;
+  background: linear-gradient(135deg, var(--lime), var(--mint) 55%, var(--emerald));
+  box-shadow: 0 10px 30px -10px rgba(52, 211, 153, 0.6);
 }
 .btn-ghost {
   color: var(--fg);
@@ -101,12 +101,12 @@ body {
   background: rgba(255, 255, 255, 0.09);
 }
 .btn:focus-visible {
-  outline: 2px solid var(--lavender);
+  outline: 2px solid var(--mint);
   outline-offset: 3px;
 }
 
 .shimmer {
-  background: linear-gradient(90deg, var(--fg) 0%, var(--lavender) 40%, var(--rose) 60%, var(--fg) 100%);
+  background: linear-gradient(90deg, var(--fg) 0%, var(--mint) 40%, var(--emerald) 60%, var(--fg) 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -121,8 +121,8 @@ body {
 
 .stamp {
   font-family: var(--font-display);
-  border: 3px solid var(--rose);
-  color: var(--rose);
+  border: 3px solid var(--emerald);
+  color: var(--emerald);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.25rem 0.75rem;

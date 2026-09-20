@@ -60,7 +60,7 @@ export default function MessageStep({
             rows={5}
             maxLength={MESSAGE_MAX}
             disabled={sending}
-            className="text-fg placeholder:text-muted/60 w-full resize-none rounded-2xl bg-white/5 p-4 text-base leading-relaxed outline-none focus:ring-2 focus:ring-(--lavender)/60"
+            className="text-fg placeholder:text-muted/60 w-full resize-none rounded-2xl bg-white/5 p-4 text-base leading-relaxed outline-none focus:ring-2 focus:ring-(--mint)/60"
           />
           <div className="text-muted/70 mt-2 text-right text-xs tabular-nums">
             {text.length}/{MESSAGE_MAX}
@@ -94,7 +94,7 @@ export default function MessageStep({
         </motion.div>
 
         {error && (
-          <p className="text-peach mt-4 text-sm" role="alert">
+          <p className="text-lime mt-4 text-sm" role="alert">
             {error}
           </p>
         )}

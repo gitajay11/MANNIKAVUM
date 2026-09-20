@@ -47,11 +47,11 @@ export default function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="text-fg w-full rounded-xl bg-white/6 px-4 py-3 outline-none focus:ring-2 focus:ring-(--lavender)/60"
+          className="text-fg w-full rounded-xl bg-white/6 px-4 py-3 outline-none focus:ring-2 focus:ring-(--mint)/60"
         />
       </div>
       {error && (
-        <p className="text-peach text-sm" role="alert">
+        <p className="text-lime text-sm" role="alert">
           {error}
         </p>
       )}

@@ -119,7 +119,7 @@ export default function Choice({
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-peach mt-4 text-sm"
+            className="text-lime mt-4 text-sm"
             role="alert"
           >
             {error}

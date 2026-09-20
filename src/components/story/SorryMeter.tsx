@@ -89,8 +89,8 @@ export default function SorryMeter({ onNext }: { onNext: () => void }) {
                 className="h-full w-full rounded-full"
                 style={{
                   background:
-                    "linear-gradient(90deg, var(--lavender), var(--rose), var(--peach))",
-                  boxShadow: "0 0 24px rgba(255,143,177,0.6)",
+                    "linear-gradient(90deg, var(--emerald), var(--mint), var(--lime))",
+                  boxShadow: "0 0 24px rgba(142,240,192,0.6)",
                 }}
               />
             </motion.div>

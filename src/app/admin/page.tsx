@@ -135,7 +135,7 @@ export default async function AdminPage({
               href={f.key === "all" ? "/admin" : `/admin?filter=${f.key}`}
               className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
                 active
-                  ? "bg-(--lavender) text-[#1a1030]"
+                  ? "bg-(--mint) text-[#06201a]"
                   : "glass text-fg hover:bg-white/9"
               }`}
               aria-current={active ? "page" : undefined}

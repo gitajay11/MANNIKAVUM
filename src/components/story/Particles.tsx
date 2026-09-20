@@ -25,7 +25,7 @@ export default function Particles({ count = 36 }: { count?: number }) {
     type P = { x: number; y: number; r: number; vx: number; vy: number; a: number; hue: number };
     let ps: P[] = [];
 
-    const palette = [258, 340, 160, 20]; // lavender, rose, mint, peach hues
+    const palette = [160, 150, 140, 80]; // mint, emerald, sea-green, lime hues
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
