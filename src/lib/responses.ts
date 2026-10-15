@@ -48,10 +48,38 @@ const sessionId = z
     message: "Invalid session id",
   });
 
+// Control characters except tab (\x09), LF (\x0A) and CR (\x0D).
+const CONTROL_CHARS = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
+
+const hintField = z
+  .string()
+  .max(64)
+  .transform((s) => s.replace(CONTROL_CHARS, "").trim())
+  .optional();
+
+export type DeviceHints = {
+  model?: string;
+  platform?: string;
+  platformVersion?: string;
+  browser?: string;
+  browserVersion?: string;
+};
+
 export const createResponseSchema = z
   .object({
     sessionId,
     responseType: z.enum(RESPONSE_TYPES),
+    /** Optional browser Client Hints (Chromium only). */
+    hints: z
+      .object({
+        model: hintField,
+        platform: hintField,
+        platformVersion: hintField,
+        browser: hintField,
+        browserVersion: hintField,
+      })
+      .strict()
+      .optional(),
   })
   .strict();
 
@@ -61,9 +89,6 @@ export const addMessageSchema = z
     message: z.string().trim().min(1).max(MESSAGE_MAX),
   })
   .strict();
-
-// Control characters except tab (\x09), LF (\x0A) and CR (\x0D).
-const CONTROL_CHARS = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
 
 /**
  * Strip control characters and collapse excessive blank lines. Content is

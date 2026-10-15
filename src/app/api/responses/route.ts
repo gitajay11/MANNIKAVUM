@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
+import { describeDevice } from "@/lib/device";
 import { prisma } from "@/lib/prisma";
 import { allowSubmission } from "@/lib/rate-limit";
 import {
@@ -20,14 +21,15 @@ async function readJson(req: Request): Promise<unknown> {
 
 /**
  * Record a response. Called only after she explicitly taps a response button.
- * Stores nothing but the chosen type, a random session id and a timestamp.
+ * Stores the chosen type, a random session id, a timestamp and one parsed
+ * "device · OS · browser" label. The raw User-Agent, IP and hints are not stored.
  */
 export async function POST(req: Request) {
   const parsed = createResponseSchema.safeParse(await readJson(req));
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
-  const { sessionId, responseType } = parsed.data;
+  const { sessionId, responseType, hints } = parsed.data;
 
   if (!allowSubmission(sessionId)) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -35,7 +37,14 @@ export async function POST(req: Request) {
 
   try {
     const created = await prisma.response.create({
-      data: { sessionId, responseType },
+      data: {
+        sessionId,
+        responseType,
+        device: describeDevice(
+          (req.headers.get("user-agent") ?? "").slice(0, 512),
+          hints,
+        ),
+      },
       select: { id: true },
     });
     return NextResponse.json({ ok: true, id: created.id }, { status: 201 });

@@ -21,7 +21,7 @@ const COLOR: Record<ResponseType, string> = {
 export default function Timeline({
   items,
 }: {
-  items: { id: string; type: ResponseType; at: string }[];
+  items: { id: string; type: ResponseType; at: string; device: string | null }[];
 }) {
   if (items.length === 0) {
     return (
@@ -51,6 +51,9 @@ export default function Timeline({
             <p className="text-muted text-xs">
               {dateFmt.format(new Date(item.at))}
             </p>
+            {item.device && (
+              <p className="text-muted/70 text-xs">{item.device}</p>
+            )}
           </li>
         ))}
       </ol>

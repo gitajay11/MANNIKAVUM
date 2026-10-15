@@ -22,6 +22,9 @@ model Response {
   sessionId    String       @unique @map("session_id")
   responseType ResponseType @map("response_type")
   message      String?      @db.VarChar(2000)
+  /// Parsed "<device> · <OS> <version> · <browser>" label, set on submit.
+  /// The raw User-Agent and IP are never stored.
+  device       String?      @map("device") @db.VarChar(120)
   createdAt    DateTime     @default(now()) @map("created_at")
 
   @@index([createdAt])

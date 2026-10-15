@@ -86,8 +86,8 @@ export default async function AdminPage({
 
       <p className="text-muted mb-6 text-xs">
         Only what she chose to submit through the site is shown here: her
-        selected response, the time, and an optional message. Nothing else
-        is collected.
+        selected response, the time, and an optional message. The device
+        type, OS and browser are also recorded. Nothing else is collected.
       </p>
 
       {/* Stats */}
@@ -105,6 +105,9 @@ export default async function AdminPage({
                 {RESPONSE_META[latest.responseType].label}
               </p>
               <p className="text-muted text-sm">{formatDate(latest.createdAt)}</p>
+              {latest.device && (
+                <p className="text-muted text-sm">{latest.device}</p>
+              )}
             </>
           ) : (
             <p className="text-muted mt-1">Nothing yet.</p>
@@ -154,6 +157,7 @@ export default async function AdminPage({
             id: r.id,
             type: r.responseType,
             at: r.createdAt.toISOString(),
+            device: r.device,
           }))}
         />
       </section>
@@ -184,6 +188,12 @@ export default async function AdminPage({
                     <div className="text-right">
                       <p className="text-muted text-xs uppercase">Date</p>
                       <p className="text-sm">{formatDate(r.createdAt)}</p>
+                      <p className="text-muted mt-2 text-xs uppercase">Device</p>
+                      {r.device ? (
+                        <p className="text-sm">{r.device}</p>
+                      ) : (
+                        <p className="text-muted text-sm italic">Not recorded</p>
+                      )}
                     </div>
                   </div>
                   <div className="mt-3">

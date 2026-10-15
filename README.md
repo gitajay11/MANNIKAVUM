@@ -22,9 +22,11 @@ One row per visit, only after she chooses a response:
 | `session_id`    | random UUID generated in her browser (sessionStorage) |
 | `response_type` | `ACCEPTED` · `NEED_TIME` · `DONT_KNOW` · `DECLINE` · `NO_RESPONSE_NEEDED` |
 | `message`       | optional text she typed (max 2000 chars), or null  |
+| `device`        | parsed "device · OS version · browser" label, e.g. `iPhone · iOS 18 · Safari` (max 120 chars), or null |
 | `created_at`    | timestamp                                          |
 
-No IP, location, user-agent, device fingerprint, or anything else.
+The raw user-agent and IP address are not stored — only the parsed
+device/OS/browser string above. No location, device fingerprint, or anything else.
 
 ## Setup
 

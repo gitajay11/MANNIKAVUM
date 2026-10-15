@@ -74,7 +74,7 @@ export default function Landing({ onNext }: { onNext: () => void }) {
           variants={itemVariants}
           className="text-muted/70 mt-8 text-xs"
         >
-          No sign-ups, no tracking. Just an apology.
+          No sign-ups. Just an apology.
         </motion.p>
       </motion.div>
     </Screen>
