@@ -3,16 +3,23 @@ import type { DeviceHints } from "./responses";
 
 const MAX_LEN = 120;
 
-/** Known model-code prefixes → vendor, used when only a Client Hints model is available. */
+/**
+ * Model-code patterns ua-parser-js does not know, checked after it. CPH is
+ * shared by OPPO and OnePlus, so ua-parser's "OPPO" is kept for those.
+ */
 const VENDOR_BY_PREFIX: [RegExp, string][] = [
   [/^(SM-|GT-)/i, "Samsung"],
   [/^Pixel/i, "Google"],
-  [/^(RMX)/i, "Realme"],
-  [/^(CPH)/i, "Oppo"],
-  [/^(V\d{4})/i, "Vivo"],
+  [/^RMX/i, "Realme"],
+  [/^CPH/i, "OPPO"],
+  [/^[VI]\d{4}/i, "Vivo"],
+  [/^(NE|LE|KB|IN|HD|GM|PJ|PH)\d{4}/i, "OnePlus"],
+  [/^2\d{4}[A-Z0-9]{4,6}$/i, "Xiaomi"],
 ];
 
 const BROWSER_NAMES: [RegExp, string][] = [
+  // Android WebView, and iOS WebKit without a Safari token: WhatsApp, Telegram, etc.
+  [/webview|^webkit$/i, "In-app browser"],
   [/samsung/i, "Samsung Internet"],
   [/edge/i, "Edge"],
   [/opera|opr/i, "Opera"],
@@ -30,10 +37,21 @@ function browserName(...candidates: (string | undefined)[]): string | null {
   return null;
 }
 
+/**
+ * Brand for a bare Client Hints model code ("23129RAA4G" → Xiaomi). Reduced
+ * UAs hide the model, so this asks ua-parser-js's device database with a
+ * stand-in Android UA, then falls back to VENDOR_BY_PREFIX.
+ */
+function vendorFor(model: string): string | undefined {
+  const { vendor } = new UAParser(
+    `Mozilla/5.0 (Linux; Android 14; ${model}) AppleWebKit/537.36 (KHTML, like Gecko) Mobile Safari/537.36`,
+  ).getDevice();
+  return vendor ?? VENDOR_BY_PREFIX.find(([re]) => re.test(model))?.[1];
+}
+
 function withVendor(model: string, vendor?: string): string {
-  const v = vendor ?? VENDOR_BY_PREFIX.find(([re]) => re.test(model))?.[1];
-  // "iPhone"/"iPad" are already unambiguous; no "Apple" prefix needed.
-  if (!v || v === "Apple" || model.toLowerCase().startsWith(v.toLowerCase())) return model;
+  const v = vendor ?? vendorFor(model);
+  if (!v || model.toLowerCase().startsWith(v.toLowerCase())) return model;
   return `${v} ${model}`;
 }
 
@@ -41,7 +59,7 @@ const major = (v?: string) => v?.split(".")[0] || "";
 
 /**
  * "<device> · <OS> <version> · <browser>", e.g.
- *   "iPhone · iOS 18 · Safari", "Samsung SM-S911B · Android 15 · Chrome".
+ *   "Apple iPhone · iOS 18 · Safari", "Samsung SM-S911B · Android 15 · Chrome".
  * Returns null on any failure — device detection must never break a submission.
  */
 export function describeDevice(userAgent: string, hints?: DeviceHints): string | null {
@@ -55,7 +73,7 @@ export function describeDevice(userAgent: string, hints?: DeviceHints): string |
     let deviceName: string;
     if (hints?.model) deviceName = withVendor(hints.model, device.vendor);
     else if (uaModel && osName !== "macOS") deviceName = withVendor(uaModel, device.vendor);
-    else if (osName === "macOS") deviceName = "Mac";
+    else if (osName === "macOS") deviceName = "Apple Mac";
     else if (osName === "Windows") deviceName = "Windows PC";
     else if (osName === "Android") deviceName = device.type === "tablet" ? "Android tablet" : "Android phone";
     else if (osName === "Chrome OS") deviceName = "Chromebook";
