@@ -2,14 +2,15 @@
 
 import type { DeviceHints, ResponseType } from "./responses";
 
-const KEY = "mk_session";
+// Renamed from "mk_session": ids under the old key may already be used up.
+const KEY = "mk_answer";
 
 /**
- * Anonymous per-visit id. Lives in sessionStorage only so a reload in the
- * same tab does not create a second record; nothing about the device or
- * person is derived from it.
+ * Anonymous id for the answer about to be sent. Kept in sessionStorage until
+ * that answer is stored, so a retry (even after a reload) cannot create a
+ * second record; nothing about the device or person is derived from it.
  */
-export function getSessionId(): string {
+function pendingId(): string {
   try {
     const existing = sessionStorage.getItem(KEY);
     if (existing) return existing;
@@ -20,6 +21,21 @@ export function getSessionId(): string {
     return crypto.randomUUID();
   }
 }
+
+/**
+ * Each stored answer gets a fresh id afterwards, so going back and choosing
+ * again is recorded instead of being dropped as a duplicate of the first.
+ */
+function releaseId() {
+  try {
+    sessionStorage.removeItem(KEY);
+  } catch {
+    /* storage unavailable: the next pendingId() is random anyway */
+  }
+}
+
+/** Id of the last stored answer; the optional message is attached to it. */
+let answeredId: string | null = null;
 
 type Brand = { brand: string; version: string };
 type UAData = {
@@ -64,19 +80,23 @@ async function getDeviceHints(): Promise<DeviceHints | undefined> {
 
 export async function submitResponse(responseType: ResponseType) {
   const hints = await getDeviceHints();
+  const sessionId = pendingId();
   const res = await fetch("/api/responses", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sessionId: getSessionId(), responseType, hints }),
+    body: JSON.stringify({ sessionId, responseType, hints }),
   });
   if (!res.ok) throw new Error(`Failed to submit (${res.status})`);
+  answeredId = sessionId;
+  releaseId();
 }
 
 export async function submitMessage(message: string) {
+  if (!answeredId) throw new Error("No stored answer to attach the message to");
   const res = await fetch("/api/responses", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sessionId: getSessionId(), message }),
+    body: JSON.stringify({ sessionId: answeredId, message }),
   });
   if (!res.ok) throw new Error(`Failed to send (${res.status})`);
 }

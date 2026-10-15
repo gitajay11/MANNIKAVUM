@@ -19,7 +19,7 @@ One row per visit, only after she chooses a response:
 | column          | meaning                                            |
 | --------------- | -------------------------------------------------- |
 | `id`            | cuid                                               |
-| `session_id`    | random UUID generated in her browser (sessionStorage) |
+| `session_id`    | random UUID per answer, generated in her browser (sessionStorage) |
 | `response_type` | `ACCEPTED` · `NEED_TIME` · `DONT_KNOW` · `DECLINE` · `NO_RESPONSE_NEEDED` |
 | `message`       | optional text she typed (max 2000 chars), or null  |
 | `device`        | parsed "device · OS version · browser" label, e.g. `iPhone · iOS 18 · Safari` (max 120 chars), or null |
@@ -51,7 +51,9 @@ npm run dev
 - Messages are sanitised server-side (control chars stripped, length capped)
   and rendered as text, never HTML.
 - Submissions are rate-limited per anonymous session id (not IP) and the DB
-  has a unique constraint on `session_id`, so a session cannot submit twice.
+  has a unique constraint on `session_id`, so a retried request cannot create
+  a duplicate. Each new answer (e.g. after going back and choosing again)
+  gets a fresh id and is recorded as its own response.
   A message can only be attached once and never overwritten.
 - Secrets only live in `.env` / Vercel environment variables.
 
